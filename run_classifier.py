@@ -375,7 +375,7 @@ class ColaProcessor(DataProcessor):
 
 
 def convert_single_example(ex_index, example, label_list, max_seq_length,
-                           tokenizer, padding='pre', truncating='pre'):
+                           tokenizer, padding='post', truncating='post'):
   """Converts a single `InputExample` into a single `InputFeatures`."""
 
   if isinstance(example, PaddingInputExample):
@@ -403,9 +403,9 @@ def convert_single_example(ex_index, example, label_list, max_seq_length,
   else:
     # Account for [CLS] and [SEP] with "- 2"
     if len(tokens_a) > max_seq_length - 2:
-      if truncating == 'pre':
+      if truncating == 'post':
         tokens_a = tokens_a[0:(max_seq_length - 2)]
-      elif truncating == 'post':
+      elif truncating == 'pre':
         tokens_a = tokens_a[-(max_seq_length - 2):]
       else:
         raise ValueError("Only pre/post")
@@ -771,7 +771,7 @@ def input_fn_builder(features, seq_length, is_training, drop_remainder):
 # This function is not used by this file but is still used by the Colab and
 # people who depend on it.
 def convert_examples_to_features(examples, label_list, max_seq_length,
-                                 tokenizer, padding='pre', truncating='pre'):
+                                 tokenizer, padding='post', truncating='post'):
   """Convert a set of `InputExample`s to a list of `InputFeatures`."""
 
   features = []
@@ -781,7 +781,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length,
 
     feature = convert_single_example(ex_index, example, label_list,
                                      max_seq_length, tokenizer,
-                                     padding='pre', truncating='pre')
+                                     padding='post', truncating='post')
 
     features.append(feature)
   return features
